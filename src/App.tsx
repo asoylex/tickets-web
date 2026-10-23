@@ -1,7 +1,25 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import ProtectedRoute from './components/common/ProtectedRoute'
+import AppLayout from './layout/AppLayout'
+import Login from './pages/Login'
+import NotFound from './pages/NotFound'
+import TicketListPage from './pages/tickets/TicketListPage'
+
 export default function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <h1 className="text-title-sm font-semibold text-gray-800 dark:text-white/90">Gestión de Tickets</h1>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate to="/tickets" replace />} />
+            <Route path="/tickets" element={<TicketListPage />} />
+          </Route>
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }

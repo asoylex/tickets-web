@@ -1,6 +1,7 @@
 import { listLands } from '@/api/lands'
+import { listProducts } from '@/api/products'
 import { listSuppliers } from '@/api/suppliers'
-import type { Land, Supplier } from '@/interfaces'
+import type { Land, Product, Supplier } from '@/interfaces'
 import { useEffect, useState } from 'react'
 
 // Opciones para los selectores. La API limita las páginas a 100 registros.
@@ -12,6 +13,24 @@ export function useSupplierOptions() {
   useEffect(() => {
     let ignore = false
     listSuppliers({ limit: OPTIONS_LIMIT })
+      .then((result) => {
+        if (!ignore) setOptions(result.data)
+      })
+      .catch(() => undefined)
+    return () => {
+      ignore = true
+    }
+  }, [])
+
+  return options
+}
+
+export function useProductOptions() {
+  const [options, setOptions] = useState<Product[]>([])
+
+  useEffect(() => {
+    let ignore = false
+    listProducts({ limit: OPTIONS_LIMIT })
       .then((result) => {
         if (!ignore) setOptions(result.data)
       })

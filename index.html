@@ -5,6 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Tickets</title>
+    <script>
+      try {
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark')
+      } catch (error) {
+        /* sin acceso a localStorage: se queda el tema claro */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

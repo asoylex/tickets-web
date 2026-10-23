@@ -1,26 +1,17 @@
 import { getErrorMessage } from '@/api/errors'
+import PageLoader from '@/components/common/PageLoader'
 import ThemeToggleButton from '@/components/common/ThemeToggleButton'
 import Input from '@/components/form/Input'
 import Label from '@/components/form/Label'
 import Button from '@/components/ui/Button'
-import Spinner from '@/components/ui/Spinner'
 import { useAuth } from '@/hooks/useAuth'
 import { showError } from '@/utils/alerts'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import axios from 'axios'
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation } from 'react-router'
 
 interface LocationState {
   from?: { pathname: string }
-}
-
-const getLoginErrorMessage = (error: unknown) => {
-  if (axios.isAxiosError(error)) {
-    if (error.response?.status === 401) return 'Correo o contraseña incorrectos'
-    if (error.response?.status === 403) return 'Tu usuario está desactivado. Contacta al administrador'
-  }
-  return getErrorMessage(error)
 }
 
 export default function Login() {
@@ -33,13 +24,7 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-8 text-brand-500" />
-      </div>
-    )
-  }
+  if (loading) return <PageLoader />
 
   const from = (location.state as LocationState | null)?.from?.pathname ?? '/'
   if (user) return <Navigate to={from} replace />
@@ -59,7 +44,7 @@ export default function Login() {
       await login(email.trim(), password)
     } catch (error) {
       setSubmitting(false)
-      showError(getLoginErrorMessage(error), 'No se pudo iniciar sesión')
+      showError(getErrorMessage(error), 'No se pudo iniciar sesión')
     }
   }
 

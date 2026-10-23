@@ -2,6 +2,7 @@ import ThemeToggleButton from '@/components/common/ThemeToggleButton'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/hooks/useAuth'
+import { confirmAction } from '@/utils/alerts'
 import { roleLabels } from '@/utils/labels'
 import { ArrowRightStartOnRectangleIcon, Bars3Icon } from '@heroicons/react/24/outline'
 
@@ -11,6 +12,15 @@ interface AppHeaderProps {
 
 export default function AppHeader({ onMenuClick }: AppHeaderProps) {
   const { user, logout } = useAuth()
+
+  const handleLogout = async () => {
+    const confirmed = await confirmAction({
+      title: '¿Cerrar sesión?',
+      text: 'Tendrás que iniciar sesión de nuevo para continuar.',
+      confirmText: 'Cerrar sesión',
+    })
+    if (confirmed) logout()
+  }
 
   return (
     <header className="sticky top-0 z-30 flex w-full items-center justify-between border-b border-gray-200 bg-white px-4 py-3 xl:px-6 xl:py-4 dark:border-gray-800 dark:bg-gray-900">
@@ -41,7 +51,7 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={logout}
+          onClick={handleLogout}
           startIcon={<ArrowRightStartOnRectangleIcon className="size-4" />}
         >
           <span className="hidden sm:inline">Cerrar sesión</span>

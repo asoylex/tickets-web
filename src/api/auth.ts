@@ -1,4 +1,4 @@
-import type { LoginResponse, User } from '@/types'
+import type { LoginResponse, User } from '@/interfaces'
 import { api } from './client'
 
 export const login = async (email: string, password: string) => {

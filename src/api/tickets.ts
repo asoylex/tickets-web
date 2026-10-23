@@ -1,15 +1,5 @@
-import type { Paginated, Ticket, TicketListItem } from '@/types'
+import type { Paginated, Ticket, TicketFilters, TicketListItem } from '@/interfaces'
 import { api } from './client'
-
-export interface TicketFilters {
-  search?: string
-  supplierId?: string
-  landId?: string
-  dateFrom?: string
-  dateTo?: string
-  page?: number
-  limit?: number
-}
 
 // Solo se envían los filtros que tienen valor.
 const toParams = (filters: TicketFilters) =>

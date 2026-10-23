@@ -1,6 +1,6 @@
 import { getCurrentUser, login as loginRequest } from '@/api/auth'
 import { AUTH_EXPIRED_EVENT, tokenStorage } from '@/api/client'
-import type { User } from '@/types'
+import type { User } from '@/interfaces'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AuthContext } from './authContext'
 

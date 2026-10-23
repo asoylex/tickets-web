@@ -1,4 +1,4 @@
-import type { Role } from '@/types'
+import type { Role } from '@/interfaces'
 import { DocumentTextIcon } from '@heroicons/react/24/outline'
 
 export interface NavItem {

@@ -1,4 +1,4 @@
-import type { Paginated, Supplier } from '@/types'
+import type { Paginated, Supplier } from '@/interfaces'
 import { api } from './client'
 
 export const listSuppliers = async (params: { search?: string; isActive?: boolean; page?: number; limit?: number } = {}) => {

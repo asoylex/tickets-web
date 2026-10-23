@@ -1,4 +1,4 @@
-import type { Role } from '@/types'
+import type { Role } from '@/interfaces'
 
 export const roleLabels: Record<Role, string> = {
   admin: 'Administrador',

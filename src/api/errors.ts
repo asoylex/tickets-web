@@ -19,12 +19,16 @@ export const getErrorMessage = (error: unknown): string => {
 }
 
 // Errores de validación por campo, tal como los devuelve la API en "details".
+// Los duplicados (409) llegan como una lista de nombres de campo; se les asigna el mensaje general.
 export const getFieldErrors = (error: unknown): FieldError[] => {
   if (!axios.isAxiosError<ApiErrorBody>(error)) return []
   const details = error.response?.data?.details
   if (!Array.isArray(details)) return []
-  return details.filter(
-    (item): item is FieldError =>
-      typeof item === 'object' && item !== null && 'field' in item && 'message' in item,
-  )
+
+  const message = error.response?.data?.message ?? ''
+  return details.flatMap((item): FieldError[] => {
+    if (typeof item === 'string') return [{ field: item, message }]
+    if (typeof item === 'object' && item !== null && 'field' in item && 'message' in item) return [item as FieldError]
+    return []
+  })
 }

@@ -1,75 +1,66 @@
-# React + TypeScript + Vite
+# Tickets Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend para administrar tickets de compra. Es la parte web de la prueba técnica de CFG y consume la API del repositorio `tickets-api`.
 
-Currently, two official plugins are available:
+## Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 con TypeScript y Vite
+- Tailwind CSS (el diseño parte de la plantilla TailAdmin)
+- React Router y Axios
+- Heroicons para los iconos y SweetAlert2 para las alertas
 
-## React Compiler
+## Cómo correrlo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Primero hay que tener la API andando (mira el README de `tickets-api`).
 
-## Expanding the ESLint configuration
+1. Instalar dependencias:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+2. Arrancar:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Se abre en `http://localhost:5173`. Las llamadas a `/api` se mandan solas a `http://localhost:3000` (está configurado en `vite.config.ts`).
+
+Si la API está en otra dirección, se puede cambiar con la variable `VITE_API_URL` (para la compilación) o `VITE_PROXY_TARGET` (para el servidor de desarrollo).
+
+Otros comandos:
+
+```bash
+npm run build
+npm run lint
+```
+
+## Qué se puede hacer
+
+- **Login** con correo y contraseña. El administrador de prueba es `admin@example.com`.
+- **Tickets**: listado con búsqueda, filtros y paginación. Crear, editar (con sus líneas) y eliminar. Eliminar solo lo ve el administrador.
+- **Pagos**: se elige una semana y se ven los pagos por proveedor con el detalle de tickets y líneas.
+- **Importar** (solo administrador): se sube el Excel, se revisa lo que va a pasar, se deciden los conflictos y se confirma dos veces antes de guardar.
+- Modo claro y oscuro.
+
+La base de datos empieza vacía, así que lo primero es entrar como administrador e importar el Excel de ejemplo que está en `tickets-api/database/data/tickets-prueba.xlsx`.
+
+## Estructura
 
 ```
+src/
+  api/          llamadas a la API (axios)
+  components/   componentes de interfaz
+  context/      sesión y tema
+  hooks/        lógica de las pantallas
+  interfaces/   tipos de TypeScript
+  layout/       menú lateral y cabecera
+  pages/        las pantallas
+  utils/        funciones auxiliares
+```
+
+## Notas
+
+- La sesión se guarda con un token en el navegador. Si el token vence, vuelve al login.
+- Los textos de la interfaz y los mensajes de error están en español.

@@ -80,6 +80,25 @@ export interface ImportAnalysis {
   canImport: boolean
 }
 
+export interface ImportNewCatalogs {
+  suppliers: number
+  lands: number
+  products: number
+}
+
+// Lo que pasaría al importar con las opciones elegidas; se calcula a partir del informe, sin llamar al servidor.
+// Los catálogos son los nuevos que trae el archivo (un máximo): si un ticket o una línea se omite, los que solo ellos usaban no se crean.
+export interface ImportPreview {
+  ticketsToCreate: number
+  ticketsToReplace: number
+  ticketsToSkip: number
+  linesToCreate: number
+  skippedDuplicateLines: number
+  skippedZeroLines: number
+  newCatalogs: ImportNewCatalogs
+  isDestructive: boolean
+}
+
 export interface ImportCreatedCount {
   created: number
 }

@@ -2,6 +2,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import AppLayout from './layout/AppLayout'
 import Login from './pages/Login'
+import RoleRoute from './components/common/RoleRoute'
+import ImportPage from './pages/imports/ImportPage'
 import NotFound from './pages/NotFound'
 import PaymentsPage from './pages/payments/PaymentsPage'
 import TicketFormPage from './pages/tickets/TicketFormPage'
@@ -20,6 +22,10 @@ export default function App() {
             <Route path="/tickets/new" element={<TicketFormPage />} />
             <Route path="/tickets/:id/edit" element={<TicketFormPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
+
+            <Route element={<RoleRoute roles={['admin']} />}>
+              <Route path="/imports" element={<ImportPage />} />
+            </Route>
           </Route>
         </Route>
 

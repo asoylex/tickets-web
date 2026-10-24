@@ -3,6 +3,7 @@ import ProtectedRoute from './components/common/ProtectedRoute'
 import AppLayout from './layout/AppLayout'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import TicketFormPage from './pages/tickets/TicketFormPage'
 import TicketListPage from './pages/tickets/TicketListPage'
 
 export default function App() {
@@ -15,6 +16,8 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index element={<Navigate to="/tickets" replace />} />
             <Route path="/tickets" element={<TicketListPage />} />
+            <Route path="/tickets/new" element={<TicketFormPage />} />
+            <Route path="/tickets/:id/edit" element={<TicketFormPage />} />
           </Route>
         </Route>
 

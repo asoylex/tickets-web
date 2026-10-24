@@ -1,6 +1,7 @@
 export type * from './auth.interface'
 export type * from './catalog.interface'
 export type * from './pagination.interface'
+export type * from './payment.interface'
 export type * from './ticket-form.interface'
 export type * from './ticket.interface'
 export type * from './user.interface'

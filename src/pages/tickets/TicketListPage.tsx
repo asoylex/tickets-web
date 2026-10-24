@@ -1,3 +1,5 @@
+import { getErrorMessage } from '@/api/errors'
+import { deleteTicket } from '@/api/tickets'
 import EmptyState from '@/components/common/EmptyState'
 import PageHeader from '@/components/common/PageHeader'
 import Input from '@/components/form/Input'
@@ -8,17 +10,25 @@ import Card from '@/components/ui/Card'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table'
+import { useAuth } from '@/hooks/useAuth'
 import { useLandOptions, useSupplierOptions } from '@/hooks/useCatalogOptions'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useTickets } from '@/hooks/useTickets'
+import type { TicketListItem } from '@/interfaces'
+import { confirmDelete, showError, showSuccess } from '@/utils/alerts'
 import { cn } from '@/utils/cn'
 import { formatAmount, formatDate } from '@/utils/format'
-import { DocumentTextIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { DocumentTextIcon, MagnifyingGlassIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const PAGE_SIZE = 20
 
 export default function TicketListPage() {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   const [search, setSearch] = useState('')
   const [supplierId, setSupplierId] = useState('')
   const [landId, setLandId] = useState('')
@@ -59,9 +69,32 @@ export default function TicketListPage() {
     setDateTo('')
   }
 
+  const handleDelete = async (ticket: TicketListItem) => {
+    const confirmed = await confirmDelete(`Se eliminará el ticket ${ticket.code} junto con todas sus líneas.`)
+    if (!confirmed) return
+
+    try {
+      await deleteTicket(ticket.id)
+      showSuccess('Ticket eliminado')
+      // Si era el único de la última página, se retrocede una página para no quedar en una vacía.
+      if (tickets.length === 1 && page > 1) changePage(page - 1)
+      else reload()
+    } catch (error) {
+      showError(getErrorMessage(error))
+    }
+  }
+
   return (
     <>
-      <PageHeader title="Tickets" description="Consulta y administra los tickets de compra." />
+      <PageHeader
+        title="Tickets"
+        description="Consulta y administra los tickets de compra."
+        actions={
+          <Button startIcon={<PlusIcon className="size-4" />} onClick={() => navigate('/tickets/new')}>
+            Nuevo ticket
+          </Button>
+        }
+      />
 
       <Card>
         <div className="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-5">
@@ -160,6 +193,9 @@ export default function TicketListPage() {
                     <TableCell header align="right">
                       Total
                     </TableCell>
+                    <TableCell header align="right">
+                      Acciones
+                    </TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -175,6 +211,28 @@ export default function TicketListPage() {
                       <TableCell align="center">{ticket.itemsCount}</TableCell>
                       <TableCell align="right" className="font-medium text-gray-800 dark:text-white/90">
                         {formatAmount(ticket.total)}
+                      </TableCell>
+                      <TableCell align="right">
+                        <div className="flex justify-end gap-1">
+                          <button
+                            type="button"
+                            aria-label={`Editar el ticket ${ticket.code}`}
+                            onClick={() => navigate(`/tickets/${ticket.id}/edit`)}
+                            className="flex size-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-white/5"
+                          >
+                            <PencilSquareIcon className="size-5" />
+                          </button>
+                          {isAdmin && (
+                            <button
+                              type="button"
+                              aria-label={`Eliminar el ticket ${ticket.code}`}
+                              onClick={() => handleDelete(ticket)}
+                              className="flex size-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-error-50 hover:text-error-600 dark:text-gray-400 dark:hover:bg-error-500/15"
+                            >
+                              <TrashIcon className="size-5" />
+                            </button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

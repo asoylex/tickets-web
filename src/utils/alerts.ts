@@ -30,20 +30,24 @@ const toast = Swal.mixin({
 interface ConfirmOptions {
   title: string
   text?: string
+  html?: string
   confirmText?: string
+  danger?: boolean
 }
 
-export const confirmAction = async ({ title, text, confirmText = 'Aceptar' }: ConfirmOptions) => {
+// "html" solo debe armarse con números y textos propios, nunca con datos escritos por el usuario.
+export const confirmAction = async ({ title, text, html, confirmText = 'Aceptar', danger = false }: ConfirmOptions) => {
   const result = await Swal.fire({
     title,
     text,
-    icon: 'question',
+    html,
+    icon: danger ? 'warning' : 'question',
     showCancelButton: true,
     confirmButtonText: confirmText,
     cancelButtonText: 'Cancelar',
     buttonsStyling: false,
     reverseButtons: true,
-    customClass,
+    customClass: danger ? dangerClass : customClass,
   })
   return result.isConfirmed
 }

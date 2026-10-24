@@ -34,6 +34,20 @@ export interface Ticket {
   items: TicketItem[]
 }
 
+export interface TicketItemPayload {
+  productId: number
+  quantity: number
+  price: number
+}
+
+export interface TicketPayload {
+  code: string
+  date: string
+  supplierId: number
+  landId: number
+  items: TicketItemPayload[]
+}
+
 export interface TicketFilters {
   search?: string
   supplierId?: string

@@ -4,6 +4,9 @@ import AppLayout from './layout/AppLayout'
 import Login from './pages/Login'
 import RoleRoute from './components/common/RoleRoute'
 import ImportPage from './pages/imports/ImportPage'
+import LandListPage from './pages/catalogs/LandListPage'
+import ProductListPage from './pages/catalogs/ProductListPage'
+import SupplierListPage from './pages/catalogs/SupplierListPage'
 import NotFound from './pages/NotFound'
 import PaymentsPage from './pages/payments/PaymentsPage'
 import TicketFormPage from './pages/tickets/TicketFormPage'
@@ -22,6 +25,9 @@ export default function App() {
             <Route path="/tickets/new" element={<TicketFormPage />} />
             <Route path="/tickets/:id/edit" element={<TicketFormPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
+            <Route path="/suppliers" element={<SupplierListPage />} />
+            <Route path="/lands" element={<LandListPage />} />
+            <Route path="/products" element={<ProductListPage />} />
 
             <Route element={<RoleRoute roles={['admin']} />}>
               <Route path="/imports" element={<ImportPage />} />

@@ -1,5 +1,12 @@
 import type { Role } from '@/interfaces'
-import { ArrowUpTrayIcon, BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowUpTrayIcon,
+  BanknotesIcon,
+  BuildingStorefrontIcon,
+  CubeIcon,
+  DocumentTextIcon,
+  MapPinIcon,
+} from '@heroicons/react/24/outline'
 
 export interface NavItem {
   label: string
@@ -20,6 +27,14 @@ export const navigation: NavGroup[] = [
     items: [
       { label: 'Tickets', path: '/tickets', icon: DocumentTextIcon },
       { label: 'Pagos', path: '/payments', icon: BanknotesIcon },
+    ],
+  },
+  {
+    title: 'Catálogos',
+    items: [
+      { label: 'Proveedores', path: '/suppliers', icon: BuildingStorefrontIcon },
+      { label: 'Ubicaciones', path: '/lands', icon: MapPinIcon },
+      { label: 'Productos', path: '/products', icon: CubeIcon },
     ],
   },
   {

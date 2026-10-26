@@ -1,4 +1,5 @@
 export type * from './auth.interface'
+export type * from './catalog-resource.interface'
 export type * from './catalog.interface'
 export type * from './import.interface'
 export type * from './pagination.interface'
